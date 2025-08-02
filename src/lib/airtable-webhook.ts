@@ -1,4 +1,5 @@
-import crypto from 'crypto';
+import crypto from 'node:crypto';
+import { Buffer } from 'node:buffer';
 
 export interface AirtableWebhookPayload {
 	webhookId: string;
@@ -190,11 +191,7 @@ export class AirtableWebhookManager {
 	}
 }
 
-import {
-	AIRTABLE_TOKEN,
-	AIRTABLE_BASE_ID,
-	AIRTABLE_WEBHOOK_SECRET
-} from '$env/static/private';
+import { AIRTABLE_TOKEN, AIRTABLE_BASE_ID } from '$env/static/private';
 
 export function createWebhookManager(): AirtableWebhookManager {
 	if (!AIRTABLE_TOKEN) {
@@ -205,5 +202,9 @@ export function createWebhookManager(): AirtableWebhookManager {
 		throw new Error('AIRTABLE_BASE_ID environment variable is not set');
 	}
 
-	return new AirtableWebhookManager(AIRTABLE_TOKEN, AIRTABLE_BASE_ID, AIRTABLE_WEBHOOK_SECRET || null);
+	// The AIRTABLE_WEBHOOK_SECRET is optional. If it's not provided, the signature
+	// verification will be skipped, and a warning will be logged.
+	const webhookSecret = process.env.AIRTABLE_WEBHOOK_SECRET || null;
+
+	return new AirtableWebhookManager(AIRTABLE_TOKEN, AIRTABLE_BASE_ID, webhookSecret);
 }

@@ -2,7 +2,6 @@ import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 import { json, error } from '@sveltejs/kit';
 import MailComposer from 'nodemailer/lib/mail-composer';
-import btoa from 'btoa';
 import {
 	GOOGLE_CLIENT_ID,
 	GOOGLE_CLIENT_SECRET,
@@ -34,7 +33,8 @@ export async function POST({ request }) {
 		});
 
 		const rawMessage = await mail.compile().build();
-		const encodedMessage = btoa(rawMessage)
+		const encodedMessage = Buffer.from(rawMessage)
+			.toString('base64')
 			.replace(/\+/g, '-')
 			.replace(/\//g, '_')
 			.replace(/=+$/, '');

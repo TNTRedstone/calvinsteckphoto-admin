@@ -9,8 +9,8 @@ interface WebhookInfo {
 
 export class WebhookScheduler {
 	private webhookManager: ReturnType<typeof createWebhookManager>;
-	private refreshInterval: NodeJS.Timeout | null = null;
-	private checkInterval: NodeJS.Timeout | null = null;
+	private refreshInterval: any | null = null;
+	private checkInterval: any | null = null;
 	private isRunning = false;
 
 	constructor() {
