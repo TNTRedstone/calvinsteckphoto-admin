@@ -52,7 +52,7 @@ async function setupWebhook() {
 
 function startServer() {
 	console.log('\n🚀 Starting SvelteKit server...');
-	const server = spawn('npm', ['run', 'dev'], {
+	const server = spawn('npm', ['run', 'dev', '--', '--host'], {
 		stdio: 'inherit',
 		shell: true,
 		env: {
@@ -76,12 +76,42 @@ function startServer() {
 	console.log('');
 }
 
+async function waitForServer(url, timeout = 30000) {
+	const startTime = Date.now();
+	const checkUrl = new URL(url);
+	checkUrl.pathname = '/api/check-auth'; // Use a lightweight endpoint for polling
+
+	console.log(`⏱️ Waiting for server to be ready at ${checkUrl.href}...`);
+
+	while (Date.now() - startTime < timeout) {
+		try {
+			// Any response (even a 401 or other error) means the server is up.
+			// We only care about catching network errors like ECONNREFUSED.
+			await fetch(checkUrl.href, { method: 'GET' });
+			console.log('✅ Server is up!');
+			return;
+		} catch (error) {
+			// Note: node-fetch wraps the system error in `error.cause`
+			if (error.cause && error.cause.code === 'ECONNREFUSED') {
+				// Server not ready, wait 1s and try again.
+				await new Promise((resolve) => setTimeout(resolve, 1000));
+			} else {
+				// A different, unexpected error occurred.
+				console.error('❌ An unexpected error occurred while waiting for the server:');
+				throw error; // Abort
+			}
+		}
+	}
+
+	throw new Error(`Server did not become ready within ${timeout / 1000} seconds.`);
+}
+
 async function main() {
 	// We need to start the server first so the setup endpoint is available.
 	// A better solution would be a dedicated setup script, but for a single
 	// command, we'll add a small delay to let the server start.
 	console.log('🚀 Starting Airtable Webhook Monitor...');
-	
+
 	// Temporarily start the server to get the webhook secret
 	const tempServer = spawn('npm', ['run', 'dev', '--', '--host'], {
 		detached: true,
@@ -89,12 +119,17 @@ async function main() {
 		stdio: 'ignore'
 	});
 
-	console.log('⏱️ Waiting for server to initialize...');
-	await new Promise(resolve => setTimeout(resolve, 10000)); // Wait 10 seconds
-
-	await setupWebhook();
+	try {
+		await waitForServer(WEBHOOK_URL);
+		await setupWebhook();
+	} catch (error) {
+		console.error(`❌ Initialization failed: ${error.message}`);
+		process.kill(-tempServer.pid, 'SIGKILL'); // Force kill the process group
+		process.exit(1);
+	}
 
 	// Kill the temporary server
+	console.log('🔌 Shutting down temporary server...');
 	process.kill(-tempServer.pid);
 
 	// Start the real server with the correct environment
