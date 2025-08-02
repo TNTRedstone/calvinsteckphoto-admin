@@ -28,7 +28,7 @@ export async function GET({ url }) {
 		}
 
 		throw redirect(302, '/admin');
-	} catch (e) {
+	} catch (e: any) {
 		console.error('Error during token exchange:', e.message);
 		throw error(500, 'Authentication failed during token exchange.');
 	}

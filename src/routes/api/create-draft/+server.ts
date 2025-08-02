@@ -50,7 +50,7 @@ export async function POST({ request }) {
 		});
 
 		return json({ success: true, draftId: response.data.id, message: 'Draft created!' });
-	} catch (e) {
+	} catch (e: any) {
 		console.error('Error creating Gmail draft:', e.message);
 		throw error(500, `Failed to create draft: ${e.message}`);
 	}

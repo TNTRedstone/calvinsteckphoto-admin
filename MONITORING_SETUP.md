@@ -7,7 +7,7 @@ This system automatically monitors your Airtable "Digital download request" tabl
 1. **Set up environment variables** in your `.env` file:
 
    ```env
-   AIRTABLE_API_KEY=your_airtable_api_key_here
+   AIRTABLE_TOKEN=your_airtable_token_here
    AIRTABLE_BASE_ID=your_airtable_base_id_here
    WEBHOOK_URL=https://your-domain.com/api/airtable-webhook
    ```
@@ -64,7 +64,7 @@ Found 1 new digital download request(s):
 
 | Variable           | Description                         | Required |
 | ------------------ | ----------------------------------- | -------- |
-| `AIRTABLE_API_KEY` | Your Airtable personal access token | ✅       |
+| `AIRTABLE_TOKEN` | Your Airtable personal access token | ✅       |
 | `AIRTABLE_BASE_ID` | Your Airtable base ID               | ✅       |
 | `WEBHOOK_URL`      | Your server's webhook URL           | ✅       |
 
@@ -139,7 +139,7 @@ for (const request of newRequests) {
 
 ### Common Issues
 
-1. **"AIRTABLE_API_KEY environment variable is not set"**
+1. **"AIRTABLE_TOKEN environment variable is not set"**
    - Make sure your `.env` file exists and has the correct API key
 
 2. **"Failed to create webhook"**

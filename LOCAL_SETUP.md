@@ -22,7 +22,7 @@ Configure your router or firewall to forward an external port (e.g., 8080) to yo
 Use your public IP address and the forwarded port in your `.env` file:
 
 ```env
-AIRTABLE_API_KEY=your_airtable_api_key_here
+AIRTABLE_TOKEN=your_airtable_token_here
 AIRTABLE_BASE_ID=your_airtable_base_id_here
 WEBHOOK_URL=http://your_public_ip:8080/api/airtable-webhook
 ```
@@ -48,7 +48,7 @@ lt --port 5173 --subdomain your-unique-name
 ### 3. Update your environment variables
 
 ```env
-AIRTABLE_API_KEY=your_airtable_api_key_here
+AIRTABLE_TOKEN=your_airtable_token_here
 AIRTABLE_BASE_ID=your_airtable_base_id_here
 WEBHOOK_URL=https://your-unique-name.loca.lt/api/airtable-webhook
 ```
@@ -191,7 +191,7 @@ sudo systemctl stop airtable-webhook.service
 
    ```bash
    # Create .env file
-   echo "AIRTABLE_API_KEY=your_key_here" > .env
+   echo "AIRTABLE_TOKEN=your_token_here" > .env
    echo "AIRTABLE_BASE_ID=your_base_id_here" >> .env
    echo "WEBHOOK_URL=http://your_public_ip:port/api/airtable-webhook" >> .env
    ```

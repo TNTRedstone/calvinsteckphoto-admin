@@ -6,7 +6,7 @@ echo "🚀 Starting Airtable Webhook Monitor (Local Setup)..."
 if [ ! -f .env ]; then
     echo "❌ .env file not found!"
     echo "Please create a .env file with your Airtable credentials:"
-    echo "AIRTABLE_API_KEY=your_airtable_api_key_here"
+    echo "AIRTABLE_TOKEN=your_airtable_token_here"
     echo "AIRTABLE_BASE_ID=your_airtable_base_id_here"
     echo "WEBHOOK_URL=your_publicly_accessible_webhook_url_here"
     exit 1

@@ -7,7 +7,7 @@ This system uses Airtable webhooks to automatically detect when new entries are 
 Add these environment variables to your `.env` file:
 
 ```env
-AIRTABLE_API_KEY=your_airtable_api_key_here
+AIRTABLE_TOKEN=your_airtable_token_here
 AIRTABLE_BASE_ID=your_airtable_base_id_here
 WEBHOOK_URL=https://your-domain.com/api/airtable-webhook
 ```
@@ -107,7 +107,7 @@ This endpoint receives notifications from Airtable when changes occur. It automa
 
 ## Setup Instructions
 
-1. **Get your Airtable API key:**
+1. **Get your Airtable token:**
    - Go to your Airtable account settings
    - Generate a personal access token
    - Add it to your environment variables
@@ -160,7 +160,7 @@ The system includes comprehensive error handling:
 
 ## Security Notes
 
-- Keep your Airtable API key secure
+- Keep your Airtable token secure
 - Use HTTPS for your webhook URL
 - Consider adding webhook signature verification for production use
 - Monitor webhook expiration and refresh automatically

@@ -12,7 +12,9 @@ export const handle = async ({ event, resolve }: { event: any; resolve: any }) =
 	// Start the webhook scheduler if it's not already running
 	const scheduler = getWebhookScheduler();
 	const status = await scheduler.getStatus();
-	if (!status.isRunning) {
+	if ('error' in status) {
+		console.error('Error getting webhook scheduler status:', status.error);
+	} else if (!status.isRunning) {
 		console.log('Auto-starting webhook scheduler...');
 		await scheduler.start();
 	}

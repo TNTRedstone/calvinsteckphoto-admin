@@ -187,12 +187,12 @@ export class AirtableWebhookManager {
 }
 
 export function createWebhookManager(): AirtableWebhookManager {
-	const apiKey = process.env.AIRTABLE_API_KEY;
+	const token = process.env.AIRTABLE_TOKEN;
 	const baseId = process.env.AIRTABLE_BASE_ID;
 	const webhookSecret = process.env.AIRTABLE_WEBHOOK_SECRET;
 
-	if (!apiKey) {
-		throw new Error('AIRTABLE_API_KEY environment variable is not set');
+	if (!token) {
+		throw new Error('AIRTABLE_TOKEN environment variable is not set');
 	}
 
 	if (!baseId) {
@@ -203,5 +203,5 @@ export function createWebhookManager(): AirtableWebhookManager {
 		throw new Error('AIRTABLE_WEBHOOK_SECRET environment variable is not set');
 	}
 
-	return new AirtableWebhookManager(apiKey, baseId, webhookSecret);
+	return new AirtableWebhookManager(token, baseId, webhookSecret);
 }
