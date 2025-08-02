@@ -37,15 +37,19 @@ export class AirtableWebhookManager {
 	private apiKey: string;
 	private baseId: string;
 
-	private webhookSecret: string;
+	private webhookSecret: string | null;
 
-	constructor(apiKey: string, baseId: string, webhookSecret: string) {
+	constructor(apiKey: string, baseId: string, webhookSecret: string | null) {
 		this.apiKey = apiKey;
 		this.baseId = baseId;
 		this.webhookSecret = webhookSecret;
 	}
 
 	verifySignature(signature: string, body: string, timestamp: string): boolean {
+		if (!this.webhookSecret) {
+			console.warn('⚠️ AIRTABLE_WEBHOOK_SECRET is not set. Skipping signature verification. This is not recommended for production.');
+			return true;
+		}
 		const hmac = crypto.createHmac('sha256', this.webhookSecret);
 		hmac.update(timestamp + body);
 		const expectedSignature = hmac.digest('hex');
@@ -201,9 +205,5 @@ export function createWebhookManager(): AirtableWebhookManager {
 		throw new Error('AIRTABLE_BASE_ID environment variable is not set');
 	}
 
-	if (!AIRTABLE_WEBHOOK_SECRET) {
-		throw new Error('AIRTABLE_WEBHOOK_SECRET environment variable is not set');
-	}
-
-	return new AirtableWebhookManager(AIRTABLE_TOKEN, AIRTABLE_BASE_ID, AIRTABLE_WEBHOOK_SECRET);
+	return new AirtableWebhookManager(AIRTABLE_TOKEN, AIRTABLE_BASE_ID, AIRTABLE_WEBHOOK_SECRET || null);
 }
