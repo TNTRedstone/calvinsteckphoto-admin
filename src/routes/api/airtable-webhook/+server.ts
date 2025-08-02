@@ -4,22 +4,34 @@ import { createWebhookManager } from '$lib/airtable-webhook';
 
 export const POST: RequestHandler = async ({ request }: { request: Request }) => {
 	try {
-		const body = await request.json();
+		const signature = request.headers.get('x-airtable-content-mac');
+		const timestamp = request.headers.get('x-airtable-webhook-timestamp');
+		const body = await request.text();
+
+		if (!signature || !timestamp) {
+			return json({ error: 'Missing signature or timestamp' }, { status: 400 });
+		}
+
+		const webhookManager = createWebhookManager();
+		if (!webhookManager.verifySignature(signature, body, timestamp)) {
+			return json({ error: 'Invalid signature' }, { status: 401 });
+		}
+
+		const notification = JSON.parse(body);
 
 		// Log the webhook notification
-		console.log('Airtable webhook notification received:', body);
+		console.log('Airtable webhook notification received:', notification);
 
 		// The webhook notification doesn't contain the actual data
 		// We need to fetch the payloads to get the detailed information
-		const webhookId = body.webhookId;
-		const baseId = body.baseId;
+		const webhookId = notification.webhookId;
+		const baseId = notification.baseId;
 
 		if (!webhookId || !baseId) {
 			return json({ error: 'Missing webhookId or baseId' }, { status: 400 });
 		}
 
 		// Use the webhook manager to fetch and process payloads
-		const webhookManager = createWebhookManager();
 		const payloads = await webhookManager.getWebhookPayloads(webhookId);
 
 		// Extract new digital download requests from the payloads

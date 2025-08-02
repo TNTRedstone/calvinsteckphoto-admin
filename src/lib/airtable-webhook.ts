@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 export interface AirtableWebhookPayload {
 	webhookId: string;
 	baseId: string;
@@ -35,9 +37,19 @@ export class AirtableWebhookManager {
 	private apiKey: string;
 	private baseId: string;
 
-	constructor(apiKey: string, baseId: string) {
+	private webhookSecret: string;
+
+	constructor(apiKey: string, baseId: string, webhookSecret: string) {
 		this.apiKey = apiKey;
 		this.baseId = baseId;
+		this.webhookSecret = webhookSecret;
+	}
+
+	verifySignature(signature: string, body: string, timestamp: string): boolean {
+		const hmac = crypto.createHmac('sha256', this.webhookSecret);
+		hmac.update(timestamp + body);
+		const expectedSignature = hmac.digest('hex');
+		return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature));
 	}
 
 	async createWebhook(notificationUrl: string): Promise<any> {
@@ -177,6 +189,7 @@ export class AirtableWebhookManager {
 export function createWebhookManager(): AirtableWebhookManager {
 	const apiKey = process.env.AIRTABLE_API_KEY;
 	const baseId = process.env.AIRTABLE_BASE_ID;
+	const webhookSecret = process.env.AIRTABLE_WEBHOOK_SECRET;
 
 	if (!apiKey) {
 		throw new Error('AIRTABLE_API_KEY environment variable is not set');
@@ -186,5 +199,9 @@ export function createWebhookManager(): AirtableWebhookManager {
 		throw new Error('AIRTABLE_BASE_ID environment variable is not set');
 	}
 
-	return new AirtableWebhookManager(apiKey, baseId);
+	if (!webhookSecret) {
+		throw new Error('AIRTABLE_WEBHOOK_SECRET environment variable is not set');
+	}
+
+	return new AirtableWebhookManager(apiKey, baseId, webhookSecret);
 }

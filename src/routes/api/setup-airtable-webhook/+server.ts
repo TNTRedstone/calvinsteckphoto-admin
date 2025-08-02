@@ -20,8 +20,9 @@ export const POST: RequestHandler = async ({ request }: { request: Request }) =>
 
 		return json({
 			success: true,
-			webhook: webhookData,
-			message: 'Airtable webhook created successfully for Digital download request table'
+			webhookId: webhookData.id,
+			webhookSecret: webhookData.macSecretBase64,
+			message: 'Airtable webhook created successfully. SAVE THE SECRET!'
 		});
 	} catch (error) {
 		console.error('Error setting up Airtable webhook:', error);
