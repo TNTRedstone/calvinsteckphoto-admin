@@ -83,14 +83,14 @@ async function main() {
 	console.log('🚀 Starting Airtable Webhook Monitor...');
 	
 	// Temporarily start the server to get the webhook secret
-	const tempServer = spawn('npm', ['run', 'dev'], {
+	const tempServer = spawn('npm', ['run', 'dev', '--', '--host'], {
 		detached: true,
 		shell: true,
 		stdio: 'ignore'
 	});
 
 	console.log('⏱️ Waiting for server to initialize...');
-	await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds
+	await new Promise(resolve => setTimeout(resolve, 10000)); // Wait 10 seconds
 
 	await setupWebhook();
 
