@@ -1,4 +1,5 @@
 import { createWebhookManager } from './airtable-webhook';
+import { WEBHOOK_URL } from '$env/static/private';
 
 interface WebhookInfo {
 	id: string;
@@ -78,7 +79,7 @@ export class WebhookScheduler {
 			}
 
 			// Create new webhook
-			const webhookUrl = process.env.WEBHOOK_URL || 'https://your-domain.com/api/airtable-webhook';
+			const webhookUrl = WEBHOOK_URL || 'https://your-domain.com/api/airtable-webhook';
 			const webhookData = await this.webhookManager.createWebhook(webhookUrl);
 
 			console.log('Created new webhook:', webhookData.id);

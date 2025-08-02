@@ -26,6 +26,7 @@
 		"@types/node": "^24.0.10",
 		"bits-ui": "^2.8.10",
 		"clsx": "^2.1.1",
+		"dotenv": "^17.2.1",
 		"formsnap": "^2.0.1",
 		"prettier": "^3.4.2",
 		"prettier-plugin-svelte": "^3.3.3",
@@ -42,7 +43,6 @@
 	},
 	"dependencies": {
 		"btoa": "^1.2.1",
-		"dotenv": "^17.1.0",
 		"google-auth-library": "^10.1.0",
 		"googleapis": "^150.0.1",
 		"node-fetch": "^2.7.0",

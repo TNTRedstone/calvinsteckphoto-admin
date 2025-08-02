@@ -5,12 +5,13 @@ const { spawn } = require('child_process');
 const fetch = require('node-fetch');
 
 const {
+	AIRTABLE_TOKEN,
 	AIRTABLE_BASE_ID,
 	ADMIN_API_SECRET,
 	WEBHOOK_URL
 } = process.env;
 
-if (!AIRTABLE_BASE_ID || !ADMIN_API_SECRET || !WEBHOOK_URL) {
+if (!AIRTABLE_TOKEN || !AIRTABLE_BASE_ID || !ADMIN_API_SECRET || !WEBHOOK_URL) {
 	console.error('❌ Missing required environment variables. Please check your .env file.');
 	process.exit(1);
 }
