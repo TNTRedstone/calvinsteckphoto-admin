@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-require('dotenv').config();
-const { spawn } = require('child_process');
-const fetch = require('node-fetch');
+import 'dotenv/config';
+import { spawn } from 'child_process';
+import fetch from 'node-fetch';
 
 const {
 	AIRTABLE_TOKEN,
