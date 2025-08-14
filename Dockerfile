@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 5173
 
 # Command to run both the dev server and the monitoring script
-CMD npm run dev -- --host --port 443 --https & npm run monitor && wait -n
+CMD npm run dev -- --host --port 443 & npm run monitor && wait -n
