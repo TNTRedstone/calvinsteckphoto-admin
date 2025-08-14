@@ -14,7 +14,4 @@ RUN npm install
 COPY . .
 
 # Expose the port the SvelteKit app runs on
-EXPOSE 5173
-
-# Command to run both the dev server and the monitoring script
-CMD npm run dev -- --host --port 443 & npm run monitor && wait -n
+EXPOSE 443
