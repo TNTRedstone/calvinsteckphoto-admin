@@ -7,6 +7,11 @@ dotenv.config();
 
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
+tserver: {
+		port: 443,
+		https: true
+	},
+
 	ssr: {
 		noExternal: ['bits-ui']
 	},
