@@ -17,5 +17,8 @@ tserver: {
 	},
 	resolve: {
 		dedupe: ['bits-ui']
+	},
+	server: {
+		allowedHosts: ["cgs312.gs-farm.net"]
 	}
 });

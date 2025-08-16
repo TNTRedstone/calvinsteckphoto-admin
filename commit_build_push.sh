@@ -18,8 +18,21 @@ git push
 echo ""
 echo "Running: docker build -t ghcr.io/tntredstone/calvinsteckphoto-admin:latest ."
 echo ""
-docker build -t ghcr.io/tntredstone/calvinsteckphoto-admin:latest .
+VERSION_FILE=".version"
+
+if [ -f "$VERSION_FILE" ]; then
+  VERSION=$(cat "$VERSION_FILE")
+  VERSION=$((VERSION + 1))
+else
+  VERSION=1
+fi
+
+echo "$VERSION" > "$VERSION_FILE"
+
+echo "Running: docker build -t ghcr.io/tntredstone/calvinsteckphoto-admin:$VERSION ."
 echo ""
-echo "Running: docker push ghcr.io/tntredstone/calvinsteckphoto-admin:latest"
+docker build -t ghcr.io/tntredstone/calvinsteckphoto-admin:$VERSION .
 echo ""
-docker push ghcr.io/tntredstone/calvinsteckphoto-admin:latest
+echo "Running: docker push ghcr.io/tntredstone/calvinsteckphoto-admin:$VERSION"
+echo ""
+docker push ghcr.io/tntredstone/calvinsteckphoto-admin:$VERSION
